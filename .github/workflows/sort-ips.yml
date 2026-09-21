@@ -21,6 +21,14 @@ jobs:
       - name: Sort, deduplicate, and log IP list
         run: python scripts/sort_ips.py
 
+      - name: Show duplicate report
+        run: |
+          echo "Duplicate log contents:"
+          cat duplicates.log
+          echo "Git changes:"
+          git status --short
+          git diff -- duplicates.log
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
