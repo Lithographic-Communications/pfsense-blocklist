@@ -28,16 +28,14 @@ for line_number, raw_line in enumerate(original_content.splitlines(), 1):
             f"Invalid IP address or range on line {line_number}: {value}"
         ) from error
 
-    normalized_value = str(network)
-
     if network in networks:
         duplicates.append(
-            f"Line {line_number}: {value} "
-            f"(normalized as {normalized_value})"
+            f"Line {line_number}: {value} (normalized as {network})"
         )
     else:
         networks.add(network)
 
+print(f"Duplicate entries found: {len(duplicates)}")
 
 def sort_key(network):
     return (
@@ -46,10 +44,9 @@ def sort_key(network):
         network.prefixlen,
     )
 
-
 normalized_content = "\n".join(
     str(network)
-    if network.prefixlen != (32 if network.version == 4 else 128)
+    if network.prefixlen != (128 if network.version == 6 else 32)
     else str(network.network_address)
     for network in sorted(networks, key=sort_key)
 )
@@ -69,9 +66,7 @@ if LOG_DUPLICATES:
         "",
     ]
 
-    if duplicates:
-        log_lines.extend(duplicates)
-    else:
-        log_lines.append("No duplicates found.")
+    log_lines.extend(duplicates or ["No duplicates found."])
 
     log_path.write_text("\n".join(log_lines) + "\n")
+    print(f"Wrote duplicate report to {log_path}")
