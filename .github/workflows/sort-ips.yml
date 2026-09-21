@@ -1,0 +1,27 @@
+name: Sort IP list
+
+on:
+  push:
+    paths:
+      - "ips.txt"
+      - "scripts/sort_ips.py"
+
+permissions:
+  contents: write
+
+jobs:
+  sort:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Sort and deduplicate IP list
+        run: python scripts/sort_ips.py
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Sort and deduplicate IP list"
+          file_pattern: ips.txt
