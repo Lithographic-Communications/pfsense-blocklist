@@ -1,7 +1,7 @@
-import ipaddress
 from pathlib import Path
+import ipaddress
 
-path = Path("ips.txt")
+path = Path("pfsense-blocklist/blocklist.txt")
 original_content = path.read_text()
 
 networks = set()
