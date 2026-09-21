@@ -2,13 +2,12 @@ import ipaddress
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Change to False to disable duplicate logging.
 LOG_DUPLICATES = True
 
-path = Path("blocklist.txt")
+blocklist_path = Path("blocklist.txt")
 log_path = Path("duplicates.log")
 
-original_content = path.read_text()
+original_content = blocklist_path.read_text()
 networks = set()
 duplicates = []
 
@@ -24,14 +23,18 @@ for line_number, raw_line in enumerate(original_content.splitlines(), 1):
             network = ipaddress.ip_network(value + suffix)
         else:
             network = ipaddress.ip_network(value, strict=False)
-
     except ValueError as error:
         raise SystemExit(
             f"Invalid IP address or range on line {line_number}: {value}"
         ) from error
 
+    normalized_value = str(network)
+
     if network in networks:
-        duplicates.append(f"Line {line_number}: {value}")
+        duplicates.append(
+            f"Line {line_number}: {value} "
+            f"(normalized as {normalized_value})"
+        )
     else:
         networks.add(network)
 
@@ -46,7 +49,7 @@ def sort_key(network):
 
 normalized_content = "\n".join(
     str(network)
-    if network.prefixlen != (128 if network.version == 6 else 32)
+    if network.prefixlen != (32 if network.version == 4 else 128)
     else str(network.network_address)
     for network in sorted(networks, key=sort_key)
 )
@@ -55,7 +58,7 @@ if normalized_content:
     normalized_content += "\n"
 
 if normalized_content != original_content:
-    path.write_text(normalized_content)
+    blocklist_path.write_text(normalized_content)
 
 if LOG_DUPLICATES:
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
