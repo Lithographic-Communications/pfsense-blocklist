@@ -1,5 +1,8 @@
-Duplicate removal report - 2026-09-21 15:13:12 UTC
-Duplicates removed: 2
+Duplicate removal report - 2026-09-21 15:17:14 UTC
+Duplicates removed: 5
 
-Line 3: 1.1.179.83 (normalized as 1.1.179.83/32)
-Line 4: 1.4.203.126 (normalized as 1.4.203.126/32)
+Line 2659: 103.69.106.18 (normalized as 103.69.106.18/32)
+Line 2754: 103.164.174.93 (normalized as 103.164.174.93/32)
+Line 4241: 181.113.114.61 (normalized as 181.113.114.61/32)
+Line 4247: 181.188.197.121 (normalized as 181.188.197.121/32)
+Line 4740: 198.245.62.60 (normalized as 198.245.62.60/32)
