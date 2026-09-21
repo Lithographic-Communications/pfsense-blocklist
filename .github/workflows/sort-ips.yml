@@ -18,11 +18,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Sort and deduplicate IP list
+      - name: Sort, deduplicate, and log IP list
         run: python scripts/sort_ips.py
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Sort and deduplicate IP list"
-          file_pattern: blocklist.txt
+          commit_message: "Sort IP list and record duplicates"
+          file_pattern: |
+            blocklist.txt
+            duplicates.log
